@@ -10,6 +10,7 @@ class Person
 
     Date m_birth;
 public:
+    // Constructors
     Person() :
         m_name(nullptr), m_surName(nullptr)
     { }
@@ -46,10 +47,43 @@ public:
         other.m_surName = nullptr;
     }
 
-    const char* name() const    { return m_name;    }
-    const char* surName() const { return m_surName; }
-    const Date& birth() const   { return m_birth;   }
+    // Assignment operator
+    Person& operator=(const Person& other)
+    {
+        if (this == &other)
+            return *this;
 
+        m_birth = other.m_birth;
+
+        delete[] m_name;
+        if (other.m_name == nullptr)
+            m_name = nullptr;
+        else
+        {
+            size_t length = strnlen_s(other.m_name, MAX_NAME) + 1;
+            m_name = new char[length];
+            strcpy_s(m_name, length, other.m_name);
+        }
+
+        delete[] m_surName;
+        if (other.m_surName == nullptr)
+            m_surName = nullptr;
+        else
+        {
+            size_t length = strnlen_s(other.m_surName, MAX_NAME) + 1;
+            m_surName = new char[length];
+            strcpy_s(m_surName, length, other.m_surName);
+        }
+
+        return *this;
+    }
+
+    // Getters
+    const char* GetName() const    { return m_name;    }
+    const char* GetSurName() const { return m_surName; }
+    const Date& GetBirth() const   { return m_birth;   }
+
+    // Setters
     Person& setName(const char* name)
     {
         delete m_name;
@@ -72,6 +106,7 @@ public:
 
     Person& setBirth(const Date& birth) { m_birth = birth; return *this; }
 
+    // Destructor
     virtual ~Person()
     {
         delete[] m_name;

@@ -10,6 +10,7 @@ class Employee
     Date m_hireDate;
 
 public:
+    // Constructors
     Employee() :
         m_position(), m_person(),
         m_hireDate()
@@ -26,7 +27,20 @@ public:
     { }
 
     Employee(Employee&& other) :
-        m_position(other.m_position), m_person(other.m_person),
-        m_hireDate(other.m_hireDate)
+        m_position(std::move(other.m_position)), m_person(std::move(other.m_person)),
+        m_hireDate(std::move(other.m_hireDate))
     { }
+
+    // Getters
+    const Position& GetPosition() const { return m_position; }
+    const Person& GetPerson() const { return m_person; }
+    const Date& GetHireDate() const { return m_hireDate; }
+
+    // Setters
+    Employee& SetPosition(const Position& position) { m_position = position; return *this; }
+    Employee& SetPerson(const Person& person) { m_person = person; return *this; }
+    Employee& SetHireDate(const Date& hireDate) { m_hireDate = hireDate; return *this; }
+
+    // Destructor
+    virtual ~Employee() { }
 };
