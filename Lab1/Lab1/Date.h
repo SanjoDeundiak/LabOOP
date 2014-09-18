@@ -1,7 +1,6 @@
 #pragma once
-#include <cstdint>
 #include <ctime>
-#include <iostream>
+#include <ostream>
 
 class Date
 {
@@ -26,10 +25,9 @@ public:
         m_year(year), m_month(month), m_day(day)
     { }
 
-    Date(const Date& other) :
-        m_year(other.m_year), m_month(other.m_month),
-        m_day(other.m_day)
-    { }
+    Date(const Date& other) = default;
+    Date(Date&&) = default;
+    Date& operator=(const Date& other) = default;
 
     // Getters
     int GetYear() const  { return m_year;  }
@@ -48,9 +46,9 @@ public:
 // Output
 std::ostream &operator<<(std::ostream &os, const Date& date)
 {
-    os << date.m_day << '.'
-        << date.m_month << '.'
-        << date.m_year;
+    os << date.GetDay() << '.'
+        << date.GetMonth() << '.'
+        << date.GetYear();
 
     return os.flush();
 }

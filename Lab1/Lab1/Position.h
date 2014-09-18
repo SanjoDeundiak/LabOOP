@@ -1,5 +1,6 @@
 #pragma once
-#include <string.h>
+#include <string>
+#include <ostream>
 
 enum class Responsibility
 {
@@ -18,6 +19,8 @@ class Position
     float m_salary;
 
 public:
+    friend std::ostream& operator<<(std::ostream& os, const Position& position); // For output
+
     // Constructors
     Position() :
         m_title(nullptr), m_salary(0),
@@ -27,28 +30,30 @@ public:
     Position(const char* title, Responsibility responsibility, float salary) :
         m_responsibility(responsibility), m_salary(salary)
     {
-        if (title == nullptr)
-            m_title = nullptr;
-        else
+        if (!title)
         {
-            size_t length = strnlen_s(title, MAX_NAME) + 1;
-            m_title = new char[length];
-            strcpy_s(m_title, length, title);
+            m_title = nullptr;
+            return;
         }
+
+        size_t length = strnlen_s(title, MAX_NAME) + 1;
+        m_title = new char[length];
+        strcpy_s(m_title, length, title);
     }
 
     Position(const Position& other) :
         m_responsibility(other.m_responsibility), m_salary(other.m_salary)
     {
         delete[] m_title;
-        if (other.m_title == nullptr)
-            m_title = nullptr;
-        else
+        if (!other.m_title)
         {
-            size_t length = strnlen_s(other.m_title, MAX_NAME) + 1;
-            m_title = new char[length];
-            strcpy_s(m_title, length, other.m_title);
+            m_title = nullptr;
+            return;
         }
+
+        size_t length = strnlen_s(other.m_title, MAX_NAME) + 1;
+        m_title = new char[length];
+        strcpy_s(m_title, length, other.m_title);
     }
 
     Position(Position&& other) :
@@ -58,7 +63,7 @@ public:
         other.m_title = nullptr;
     }
 
-    // Assignment operator
+    // Assignment operators
     Position& operator=(const Position& other)
     {
         if (this == &other)
@@ -68,14 +73,29 @@ public:
         m_responsibility = other.m_responsibility;
 
         delete[] m_title;
-        if (other.m_title == nullptr)
-            m_title = nullptr;
-        else
+        if (!other.m_title)
         {
-            size_t length = strnlen_s(other.m_title, MAX_NAME) + 1;
-            m_title = new char[length];
-            strcpy_s(m_title, length, other.m_title);
+            m_title = nullptr;
+            return *this;
         }
+
+        size_t length = strnlen_s(other.m_title, MAX_NAME) + 1;
+        m_title = new char[length];
+        strcpy_s(m_title, length, other.m_title);
+        return *this;
+    }
+
+    Position& operator=(Position&& other)
+    {
+        if (this == &other)
+            return *this;
+
+        m_salary = other.m_salary;
+        m_responsibility = other.m_responsibility;
+
+        delete[] m_title;
+        m_title = other.m_title;
+        other.m_title = nullptr;
 
         return *this;
     }
@@ -89,14 +109,15 @@ public:
     Position& setTitle(const char* title)
     {
         delete[] m_title;
-        if (title == nullptr)
-            m_title = nullptr;
+        if (!title)
         {
-            size_t length = strnlen_s(title, MAX_NAME) + 1;
-            m_title = new char[length];
-            strcpy_s(m_title, length, title);
+            m_title = nullptr;
+            return *this;
         }
 
+        size_t length = strnlen_s(title, MAX_NAME) + 1;
+        m_title = new char[length];
+        strcpy_s(m_title, length, title);
         return *this;
     }
 
@@ -109,3 +130,25 @@ public:
         delete[] m_title;
     }
 };
+
+std::ostream& operator<<(std::ostream& os, const Responsibility& responsibility)
+{
+    switch (responsibility)
+    {
+    case Responsibility::None: os << "No responsibilities"; break;
+    case Responsibility::Worker: os << "Worker"; break;
+    case Responsibility::Manager: os << "Manager"; break;
+    case Responsibility::Employer: os << "Employer"; break;
+    }
+
+    return os.flush();
+}
+
+std::ostream& operator<<(std::ostream& os, const Position& position)
+{
+    os << position.GetTitle() << ' '
+        << position.GetResponsibility() << ' '
+        << position.GetSalary() << ' ';
+
+    return os.flush();
+}

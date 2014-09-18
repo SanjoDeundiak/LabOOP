@@ -2,6 +2,7 @@
 #include "Position.h"
 #include "Date.h"
 #include "Person.h"
+#include <ostream>
 
 class Employee
 {
@@ -10,26 +11,22 @@ class Employee
     Date m_hireDate;
 
 public:
+    friend std::ostream& operator<<(std::ostream& os, const Employee& employee); // For output
+
     // Constructors
-    Employee() :
-        m_position(), m_person(),
-        m_hireDate()
-    { }
+    Employee() = default;
 
     Employee(const Position& position, const Person& person, const Date& hireDate) :
         m_position(position), m_person(person),
         m_hireDate(hireDate)
     { }
 
-    Employee(const Employee& other) :
-        m_position(other.m_position), m_person(other.m_person),
-        m_hireDate(other.m_hireDate)
-    { }
+    Employee(const Employee& other) = default;
 
-    Employee(Employee&& other) :
+    Employee(Employee&&) = default;/* :
         m_position(std::move(other.m_position)), m_person(std::move(other.m_person)),
         m_hireDate(std::move(other.m_hireDate))
-    { }
+    { }*/
 
     // Getters
     const Position& GetPosition() const { return m_position; }
@@ -44,3 +41,12 @@ public:
     // Destructor
     virtual ~Employee() { }
 };
+
+std::ostream& operator<<(std::ostream& os, const Employee& employee)
+{
+    os << "Person: " << employee.GetPerson() << ' '
+        << "Position: " << employee.GetPosition() << ' '
+        << "Hire date: " << employee.GetHireDate();
+
+    return os.flush();
+}

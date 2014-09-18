@@ -1,5 +1,7 @@
 #pragma once
 #include "Date.h"
+#include <string>
+#include <ostream>
 
 class Person
 {
@@ -10,6 +12,8 @@ class Person
 
     Date m_birth;
 public:
+    friend std::ostream& operator<<(std::ostream& os, const Person& person); // For output
+
     // Constructors
     Person() :
         m_name(nullptr), m_surName(nullptr)
@@ -18,25 +22,45 @@ public:
     Person(const char* name, const char* surName, const Date& birth) :
         m_birth(birth)
     {
-        size_t length = strnlen_s(name, MAX_NAME) + 1;
-        m_name = new char[length];
-        strcpy_s(m_name, length, name);
+        if (!name)
+            m_name = nullptr;
+        else
+        {
+            size_t length = strnlen_s(name, MAX_NAME) + 1;
+            m_name = new char[length];
+            strcpy_s(m_name, length, name);
+        }
 
-        length = strnlen_s(surName, MAX_NAME) + 1;
-        m_surName = new char[length];
-        strcpy_s(m_surName, length, surName);
+        if (!surName)
+            m_surName = nullptr;
+        else
+        {
+            size_t length = strnlen_s(surName, MAX_NAME) + 1;
+            m_surName = new char[length];
+            strcpy_s(m_surName, length, surName);
+        }
     }
 
     Person(const Person& other) :
         m_birth(other.m_birth)
     {
-        size_t length = strnlen_s(other.m_name, MAX_NAME) + 1;
-        m_name = new char[length];
-        strcpy_s(m_name, length, other.m_name);
+        if (!other.m_name)
+            m_name = nullptr;
+        else
+        {
+            size_t length = strnlen_s(other.m_name, MAX_NAME) + 1;
+            m_name = new char[length];
+            strcpy_s(m_name, length, other.m_name);
+        }
 
-        length = strnlen_s(other.m_surName, MAX_NAME) + 1;
-        m_surName = new char[length];
-        strcpy_s(m_surName, length, other.m_surName);
+        if (!other.m_surName)
+            m_surName = nullptr;
+        else
+        {
+            size_t length = strnlen_s(other.m_surName, MAX_NAME) + 1;
+            m_surName = new char[length];
+            strcpy_s(m_surName, length, other.m_surName);
+        }
     }
 
     Person(Person&& other) :
@@ -47,7 +71,7 @@ public:
         other.m_surName = nullptr;
     }
 
-    // Assignment operator
+    // Assignment operators
     Person& operator=(const Person& other)
     {
         if (this == &other)
@@ -56,7 +80,7 @@ public:
         m_birth = other.m_birth;
 
         delete[] m_name;
-        if (other.m_name == nullptr)
+        if (!other.m_name)
             m_name = nullptr;
         else
         {
@@ -66,7 +90,7 @@ public:
         }
 
         delete[] m_surName;
-        if (other.m_surName == nullptr)
+        if (!other.m_surName)
             m_surName = nullptr;
         else
         {
@@ -74,6 +98,24 @@ public:
             m_surName = new char[length];
             strcpy_s(m_surName, length, other.m_surName);
         }
+
+        return *this;
+    }
+
+    Person& operator=(Person&& other)
+    {
+        if (this == &other)
+            return *this;
+
+        m_birth = other.m_birth;
+
+        delete[] m_name;
+        m_name = other.m_name;
+        other.m_name = nullptr;
+
+        delete[] m_surName;
+        m_surName = other.m_surName;
+        other.m_surName = nullptr;
 
         return *this;
     }
@@ -87,6 +129,12 @@ public:
     Person& setName(const char* name)
     {
         delete m_name;
+        if (!name)
+        {
+            m_name = nullptr;
+            return *this;
+        }
+
         size_t length = strnlen_s(name, MAX_NAME) + 1;
         m_name = new char[length];
         strcpy_s(m_name, length, name);
@@ -97,6 +145,12 @@ public:
     Person& setSurName(const char* surName)
     {
         delete m_surName;
+        if (!surName)
+        {
+            m_surName = nullptr;
+            return *this;
+        }
+
         size_t length = strnlen_s(surName, MAX_NAME) + 1;
         m_surName = new char[length];
         strcpy_s(m_surName, length, surName);
@@ -113,3 +167,10 @@ public:
         delete[] m_surName;
     }
 };
+
+std::ostream& operator<<(std::ostream& os, const Person& person)
+{
+    os << person.GetName() << ' ' << person.GetSurName() << ' ' << person.GetBirth();
+
+    return os.flush();
+}
