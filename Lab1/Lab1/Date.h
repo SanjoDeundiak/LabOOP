@@ -1,6 +1,6 @@
 #pragma once
 #include <ctime>
-#include <ostream>
+#include <istream>
 
 class Date
 {
@@ -12,12 +12,12 @@ public:
     // Constructors
     Date()
     {
-        std::time_t time(0);
+        std::time_t t = time(0);
         tm now;
-        localtime_s(&now, &time);
+        localtime_s(&now, &t);
 
         m_year = now.tm_year + 1900;
-        m_month = now.tm_mon;
+        m_month = now.tm_mon + 1;
         m_day = now.tm_mday;
     }
 
@@ -43,7 +43,19 @@ public:
     static Date Interactive(std::istream& is)
     {
         int d, m, y;
-        is >> d >> m >> y;
+
+        do
+        {
+            if (!is)
+            {
+                is.clear();
+                is.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            }
+            is >> d;
+            is >> m;
+            is >> y;
+        } while (!is);
+
         return Date(y, m, d);
     }
 

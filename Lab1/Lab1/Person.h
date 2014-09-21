@@ -165,14 +165,15 @@ public:
 
     static Person Interactive(std::istream& is, std::ostream& os)
     {
+        is.ignore();
         char name[MAX_NAME], surName[MAX_NAME];
-        os << "Enter name: ";
-        is >> name;
+        os << "\tEnter name: ";
+        is.getline(name, MAX_NAME);
 
-        os << "\nEnter surname: ";
-        is >> surName;
+        os << "\tEnter surname: ";
+        is.getline(surName, MAX_NAME);
 
-        os << "\nEnter date of birth in format dd mm yyyy: ";
+        os << "\tEnter date of birth in format dd mm yyyy: ";
 
         return Person(name, surName, Date::Interactive(is));
     }

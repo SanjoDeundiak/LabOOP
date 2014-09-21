@@ -48,5 +48,13 @@ namespace TestOrganization
         org3.Brief(os) << std::endl;
 
         delete[] employees;
+
+        os << "TESTING INTERACTIVE INPUT" << std::endl;
+
+        Organization org4(Organization::Interactive(is, os));
+        os << "__FULL__" << std::endl;
+        os << org4 << std::endl;
+        os << "__BRIEF__" << std::endl;
+        org4.Brief(os) << std::endl;
     }
 }

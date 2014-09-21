@@ -53,11 +53,11 @@ public:
 
     static Employee Interactive(std::istream& is, std::ostream& os)
     {
-        os << "Enter position:\n";
+        os << "Position:\n";
         Position pos = Position::Interactive(is, os);
-        os << "Enter person:\n";
+        os << "Person:\n";
         Person pers = Person::Interactive(is, os);
-        os << "\nEnter date of birth in format dd mm yyyy: ";
+        os << "Enter hire date in format dd mm yyyy: ";
         return Employee(pos, pers, Date::Interactive(is));
     }
 

@@ -57,6 +57,7 @@ Organization::Organization(Organization&& other) :
 {
     TRACE_ME
     other.m_counter = 0;
+    other.m_employees = nullptr;
     other.m_name = nullptr;
 }
 
@@ -173,6 +174,24 @@ Organization Organization::Interactive(std::istream& is, std::ostream& os)
 {
     char name[MAX_NAME];
     os << "Enter name: ";
-    is >> name;
-    os << 
+    is.getline(name, MAX_NAME);
+    os << "Enter number of employees: ";
+    size_t number;
+
+    is >> number;
+    while (!is)
+    {
+        is.clear();
+        is.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        is >> number;
+    }
+
+    Organization org(name, nullptr, 0);
+    for (size_t i = 0; i < number; i++)
+    {
+        is.ignore();
+        os << "Employee #" << i + 1 << std::endl;
+        org.AddEmployee(Employee::Interactive(is, os));
+    }
+    return org;
 }

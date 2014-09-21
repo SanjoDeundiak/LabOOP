@@ -129,19 +129,32 @@ public:
     static Position Interactive(std::istream& is, std::ostream& os)
     {
         char title[MAX_NAME];
-        os << "Enter title: ";
-        is >> title;
-
+        os << "\tEnter title: ";
+        is.getline(title, MAX_NAME);
         int resp;
+
         do
         {
-            os << "\nEnter responsibility (0-3): ";
+            if (!is)
+            {
+                is.clear();
+                is.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            }
+            os << "\tEnter responsibility (0-None, 1-Worker, 2-Manager, 3-Employer): ";
             is >> resp;
-        } while (resp < 0 || resp > 3);
+        } while (resp < 0 || resp > 3 || !is);
 
-        os << "\nEnter salary: ";
         float salary;
-        is >> salary;
+        do
+        {
+            if (!is)
+            {
+                is.clear();
+                is.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            }
+            os << "\tEnter salary: ";
+            is >> salary;
+        } while (!is);
 
         return Position(title, static_cast<Responsibility>(resp), salary);
     }
