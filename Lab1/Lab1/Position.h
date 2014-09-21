@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <ostream>
+#include "Trace.h"
 
 enum class Responsibility
 {
@@ -12,7 +13,9 @@ enum class Responsibility
 
 class Position
 {
-    size_t MAX_NAME = 250;
+    // Constants
+    static const size_t MAX_NAME = 250;
+    static const char* DEFAULT_TITLE;
 
     char* m_title;
     Responsibility m_responsibility;
@@ -44,7 +47,6 @@ public:
     Position(const Position& other) :
         m_responsibility(other.m_responsibility), m_salary(other.m_salary)
     {
-        delete[] m_title;
         if (!other.m_title)
         {
             m_title = nullptr;
@@ -59,6 +61,7 @@ public:
     Position(Position&& other) :
         m_responsibility(other.m_responsibility), m_salary(other.m_salary)
     {
+        TRACE_ME
         m_title = other.m_title;
         other.m_title = nullptr;
     }
@@ -87,8 +90,7 @@ public:
 
     Position& operator=(Position&& other)
     {
-        if (this == &other)
-            return *this;
+        TRACE_ME
 
         m_salary = other.m_salary;
         m_responsibility = other.m_responsibility;
@@ -124,31 +126,29 @@ public:
     Position& setResposibility(Responsibility responsibility) { m_responsibility = responsibility; return *this; }
     Position& setSalary(float salary) { m_salary = salary; return *this; }
 
+    static Position Interactive(std::istream& is, std::ostream& os)
+    {
+        char title[MAX_NAME];
+        os << "Enter title: ";
+        is >> title;
+
+        int resp;
+        do
+        {
+            os << "\nEnter responsibility (0-3): ";
+            is >> resp;
+        } while (resp < 0 || resp > 3);
+
+        os << "\nEnter salary: ";
+        float salary;
+        is >> salary;
+
+        return Position(title, static_cast<Responsibility>(resp), salary);
+    }
+
     // Destructor
     virtual ~Position()
     {
         delete[] m_title;
     }
 };
-
-std::ostream& operator<<(std::ostream& os, const Responsibility& responsibility)
-{
-    switch (responsibility)
-    {
-    case Responsibility::None: os << "No responsibilities"; break;
-    case Responsibility::Worker: os << "Worker"; break;
-    case Responsibility::Manager: os << "Manager"; break;
-    case Responsibility::Employer: os << "Employer"; break;
-    }
-
-    return os.flush();
-}
-
-std::ostream& operator<<(std::ostream& os, const Position& position)
-{
-    os << position.GetTitle() << ' '
-        << position.GetResponsibility() << ' '
-        << position.GetSalary() << ' ';
-
-    return os.flush();
-}

@@ -21,12 +21,25 @@ public:
         m_hireDate(hireDate)
     { }
 
-    Employee(const Employee& other) = default;
+    Employee(const Employee&) = default;
 
-    Employee(Employee&&) = default;/* :
+    Employee(Employee&& other) :
         m_position(std::move(other.m_position)), m_person(std::move(other.m_person)),
         m_hireDate(std::move(other.m_hireDate))
-    { }*/
+    {
+        TRACE_ME
+    }
+
+    // Asignment operators
+    Employee& operator=(const Employee&) = default;
+
+    Employee& operator=(Employee&& other)
+    {
+        TRACE_ME
+        m_position = std::move(other.m_position);
+        m_person = std::move(other.m_person);
+        m_hireDate = std::move(other.m_hireDate);
+    }
 
     // Getters
     const Position& GetPosition() const { return m_position; }
@@ -38,15 +51,16 @@ public:
     Employee& SetPerson(const Person& person) { m_person = person; return *this; }
     Employee& SetHireDate(const Date& hireDate) { m_hireDate = hireDate; return *this; }
 
+    static Employee Interactive(std::istream& is, std::ostream& os)
+    {
+        os << "Enter position:\n";
+        Position pos = Position::Interactive(is, os);
+        os << "Enter person:\n";
+        Person pers = Person::Interactive(is, os);
+        os << "\nEnter date of birth in format dd mm yyyy: ";
+        return Employee(pos, pers, Date::Interactive(is));
+    }
+
     // Destructor
     virtual ~Employee() { }
 };
-
-std::ostream& operator<<(std::ostream& os, const Employee& employee)
-{
-    os << "Person: " << employee.GetPerson() << ' '
-        << "Position: " << employee.GetPosition() << ' '
-        << "Hire date: " << employee.GetHireDate();
-
-    return os.flush();
-}

@@ -2,10 +2,14 @@
 #include "Date.h"
 #include <string>
 #include <ostream>
+#include "Trace.h"
 
 class Person
 {
-    size_t MAX_NAME = 250;
+    // Constants
+    static const size_t MAX_NAME = 250;
+    static const char* DEFAULT_NAME;
+    static const char* DEFAULT_SURNAME;
 
     char* m_name;
     char* m_surName;
@@ -67,6 +71,7 @@ public:
         m_name(other.m_name), m_surName(other.m_surName),
         m_birth(other.m_birth)
     {
+        TRACE_ME
         other.m_name = nullptr;
         other.m_surName = nullptr;
     }
@@ -104,9 +109,7 @@ public:
 
     Person& operator=(Person&& other)
     {
-        if (this == &other)
-            return *this;
-
+        TRACE_ME
         m_birth = other.m_birth;
 
         delete[] m_name;
@@ -160,6 +163,20 @@ public:
 
     Person& setBirth(const Date& birth) { m_birth = birth; return *this; }
 
+    static Person Interactive(std::istream& is, std::ostream& os)
+    {
+        char name[MAX_NAME], surName[MAX_NAME];
+        os << "Enter name: ";
+        is >> name;
+
+        os << "\nEnter surname: ";
+        is >> surName;
+
+        os << "\nEnter date of birth in format dd mm yyyy: ";
+
+        return Person(name, surName, Date::Interactive(is));
+    }
+
     // Destructor
     virtual ~Person()
     {
@@ -167,10 +184,3 @@ public:
         delete[] m_surName;
     }
 };
-
-std::ostream& operator<<(std::ostream& os, const Person& person)
-{
-    os << person.GetName() << ' ' << person.GetSurName() << ' ' << person.GetBirth();
-
-    return os.flush();
-}

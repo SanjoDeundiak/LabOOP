@@ -25,9 +25,10 @@ public:
         m_year(year), m_month(month), m_day(day)
     { }
 
-    Date(const Date& other) = default;
-    Date(Date&&) = default;
-    Date& operator=(const Date& other) = default;
+    Date(const Date&) = default;
+
+    // Assignment operator
+    Date& operator=(const Date&) = default;
 
     // Getters
     int GetYear() const  { return m_year;  }
@@ -39,16 +40,13 @@ public:
     Date& setMonth(int month) { m_month = month; return *this; }
     Date& setDay(int day)     { m_day = day;     return *this; }
 
+    static Date Interactive(std::istream& is)
+    {
+        int d, m, y;
+        is >> d >> m >> y;
+        return Date(y, m, d);
+    }
+
     // Destructor
     virtual ~Date() { }
 };
-
-// Output
-std::ostream &operator<<(std::ostream &os, const Date& date)
-{
-    os << date.GetDay() << '.'
-        << date.GetMonth() << '.'
-        << date.GetYear();
-
-    return os.flush();
-}

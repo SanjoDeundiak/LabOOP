@@ -83,9 +83,15 @@
     <ClInclude Include="Organization.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="Position.h" />
+    <ClInclude Include="Test.h" />
+    <ClInclude Include="Trace.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Constants.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Organization.cpp" />
+    <ClCompile Include="OutputSource.cpp" />
+    <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
