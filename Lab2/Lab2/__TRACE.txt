@@ -1,0 +1,27 @@
+main
+TestOrganization::Test
+---Creating date---
+Date::Date
+---Creating person---
+Date::Date
+Person::Person
+---Creating position---
+Position::Position
+---Creating employee---
+Date::Date
+Date::Date
+Person::Person
+Position::Position
+Date::Date
+Employee::Employee
+Date::~Date
+---END---
+Employee::~Employee
+Date::~Date
+Position::~Position
+Person::~Person
+Date::~Date
+Position::~Position
+Person::~Person
+Date::~Date
+Date::~Date
