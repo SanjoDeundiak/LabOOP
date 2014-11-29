@@ -11,6 +11,8 @@ class Employee : public Person, public Position
 public:
     friend std::ostream& operator<<(std::ostream& os, const Employee& employee); // For output
 
+    void Brief(std::ostream& os) const;
+
     // Constructors
     Employee() : Person(), Position(),
         m_hireDate()

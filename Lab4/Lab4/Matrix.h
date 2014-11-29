@@ -100,7 +100,14 @@ public:
     size_t sizem() const { return vec.size(); }
     size_t sizen() const { return vec.empty() ? 0 : vec[0].size(); }
 
-    void resizem(size_t m) { vec.resize(m); }
+    void resizem(size_t m)
+    {
+        size_t tempm = vec.size(), n = (tempm ? vec[0].size() : 0);
+        vec.resize(m);
+        for (size_t j = tempm; j < m; j++)
+            vec[j].resize(n);
+    }
+
     void resizen(size_t n)
     {
         for (size_t i = 0; i < vec.size(); i++)

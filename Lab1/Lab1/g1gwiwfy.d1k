@@ -1,0 +1,72 @@
+#include "Date.h"
+#include "Employee.h"
+#include "Person.h"
+#include "Position.h"
+#include "Organization.h"
+
+// Forward decl
+std::ostream &operator<<(std::ostream &os, const Date& date);
+std::ostream& operator<<(std::ostream& os, const Person& person);
+std::ostream& operator<<(std::ostream& os, const Responsibility& responsibility);
+std::ostream& operator<<(std::ostream& os, const Employee& employee);
+std::ostream& operator<<(std::ostream& os, const Position& position);
+std::ostream& operator<<(std::ostream& os, const Organization& organization);
+
+std::ostream &operator<<(std::ostream &os, const Date& date)
+{
+    os << date.GetDay() << '.'
+        << date.GetMonth() << '.'
+        << date.GetYear();
+
+    return os.flush();
+}
+
+std::ostream& operator<<(std::ostream& os, const Person& person)
+{
+    os << ((person.GetName()) ? person.GetName() : Person::DEFAULT_NAME) << ' '
+        << ' ' << person.GetSurName() << ' ' << person.GetBirth();
+
+    return os.flush();
+}
+
+std::ostream& operator<<(std::ostream& os, const Responsibility& responsibility)
+{
+    switch (responsibility)
+    {
+    case Responsibility::None: os << "No responsibilities"; break;
+    case Responsibility::Worker: os << "Worker"; break;
+    case Responsibility::Manager: os << "Manager"; break;
+    case Responsibility::Employer: os << "Employer"; break;
+    }
+
+    return os.flush();
+}
+
+std::ostream& operator<<(std::ostream& os, const Employee& employee)
+{
+    os << "Person: " << employee.GetPerson() << ' '
+        << "Position: " << employee.GetPosition() << ' '
+        << "Hire date: " << employee.GetHireDate();
+
+    return os.flush();
+}
+
+std::ostream& operator<<(std::ostream& os, const Position& position)
+{
+    os << position.GetTitle() << ' '
+        << position.GetResponsibility() << ' '
+        << position.GetSalary() << ' ';
+
+    return os.flush();
+}
+
+std::ostream& operator<<(std::ostream& os, const Organization& organization)
+{
+    os << "Organization: " << organization.m_name << std::endl
+        << organization.m_counter << " employess :" << std::endl;
+
+    for (size_t i = 0; i < organization.m_counter; i++)
+        os << '[' << i << "]: " << *organization.GetIEmployee(i) << std::endl;
+
+    return os;
+}

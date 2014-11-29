@@ -4,7 +4,9 @@ TestOrganization::Test
 Date::Date
 ---Creating person---
 Date::Date
+Date::Date
 Person::Person
+Date::~Date
 ---Creating position---
 Position::Position
 ---Creating employee---

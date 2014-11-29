@@ -19,6 +19,8 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Person& person); // For output
     friend std::istream& operator>>(std::istream& is, Person& person); // For input
 
+    virtual void Brief(std::ostream& os) const;
+
     bool operator==(const Person& other) const
     {
         return strncmp(m_name, other.m_name, MAX_NAME) == 0

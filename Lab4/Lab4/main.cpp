@@ -34,7 +34,7 @@ int main()
     m[2][1] = 8;
     m[2][2] = 9;
 
-    for (size_t i = 0; i < 2; i++)
+    for (size_t i = 0; i < 3; i++)
     {
         for (size_t j = 0; j < 3; j++)
             std::cout << m[i][j] << ' ';
@@ -46,9 +46,9 @@ int main()
     m[1][3] = 11;
     m[2][3] = 12;
 
-    for (size_t i = 0; i < 2; i++)
+    for (size_t i = 0; i < 3; i++)
     {
-        for (size_t j = 0; j < 3; j++)
+        for (size_t j = 0; j < 4; j++)
             std::cout << m[i][j] << ' ';
         std::cout << std::endl;
     }

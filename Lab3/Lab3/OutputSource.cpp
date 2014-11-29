@@ -6,6 +6,16 @@
 #include <iostream>
 #include <iomanip>
 
+void Employee::Brief(std::ostream& os) const
+{
+    os << "I'm EMPLOYEE, my hire date is " << m_hireDate << std::endl;
+}
+
+void Person::Brief(std::ostream& os) const
+{
+    os << "I'm PERSON, my birthday: " << m_birth << std::endl;
+}
+
 // Forward decl
 std::ostream &operator<<(std::ostream &os, const Date& date);
 std::ostream& operator<<(std::ostream& os, const Person& person);
