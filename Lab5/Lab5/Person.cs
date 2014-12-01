@@ -12,13 +12,22 @@ namespace Lab5
         public string surname { set; get; }
         public System.DateTime birthday { set; get; }
 
+        public Person() { }
+
         public Person(string name, string surname, System.DateTime birthday)
         {
-            if (name == null || surname == null || birthday == null)
+            if (name == null || surname == null)
                 throw new ArgumentNullException();
-            this.name= name;
+            this.name = name;
             this.surname = surname;
             this.birthday = birthday;
+        }
+
+        public Person(Person other)
+        {
+            name = other.name;
+            surname = other.surname;
+            birthday = other.birthday;
         }
 
         public object Clone()
@@ -29,7 +38,10 @@ namespace Lab5
         public override bool Equals(object otherObj)
         {
             if (otherObj == null)
-                throw new ArgumentNullException();
+                return false;
+
+            if (!(otherObj is Person))
+                return false;
 
             Person other = otherObj as Person;
             return (name == other.name && surname == other.surname && birthday == other.birthday);
@@ -61,12 +73,19 @@ namespace Lab5
 
         public override string ToString()
         {
-            return name + "\t" + surname + "\t" + birthday.ToString();
+            return name + "\t" + surname + "\t" + birthday.ToShortDateString();
+        }
+
+        public string Brief()
+        {
+            return name;
         }
 
         static void Main(string[] args)
         {
             Person p1 = new Person("Sanjo", "Deundiak", new System.DateTime(1995, 1, 20));
+            System.Console.WriteLine(p1.ToString());
+            System.Console.WriteLine(p1.Brief());
             System.Console.ReadKey();
         }
     }
